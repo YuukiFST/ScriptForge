@@ -22,5 +22,5 @@ REGISTRY_ROOT_KEYS = {
     "HKEY_CURRENT_CONFIG": winreg.HKEY_CURRENT_CONFIG,
 }
 
-APP_TITLE = "Registry Utility"
+APP_TITLE = "ScriptForge"
 APP_CREDITS = "Credits: yuuki_0711"

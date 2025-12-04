@@ -24,6 +24,11 @@ from regutility.core.backup import (
     write_backup_file,
     generate_backup_reg,
 )
+from regutility.core.converter import (
+    ConversionOptions,
+    convert_reg_to_bat,
+    convert_reg_file_to_bat,
+)
 
 __all__ = [
     "parse_reg_file",
@@ -44,4 +49,7 @@ __all__ = [
     "get_current_registry_values_for_backup",
     "write_backup_file",
     "generate_backup_reg",
+    "ConversionOptions",
+    "convert_reg_to_bat",
+    "convert_reg_file_to_bat",
 ]

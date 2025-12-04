@@ -1,7 +1,12 @@
+import os
+
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QTabWidget
+from PyQt6.QtGui import QIcon
 
 from regutility.ui.compare_tab import CompareTab
 from regutility.ui.backup_tab import BackupTab
+from regutility.ui.convert_tab import ConvertTab
+from regutility.ui.ps1_convert_tab import Ps1ConvertTab
 from regutility.utils.constants import (
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
@@ -12,7 +17,12 @@ from regutility.utils.constants import (
 )
 
 
-class RegistryUtilityApp(QMainWindow):
+def get_icon_path() -> str:
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(current_dir, "..", "assets", "icon.png")
+
+
+class ScriptForgeApp(QMainWindow):
 
     def __init__(self):
         super().__init__()
@@ -22,6 +32,10 @@ class RegistryUtilityApp(QMainWindow):
     def _setup_window(self) -> None:
         self.setWindowTitle(APP_TITLE)
         self.setGeometry(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT)
+        
+        icon_path = get_icon_path()
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QIcon(icon_path))
 
     def _setup_ui(self) -> None:
         central_widget = QWidget()
@@ -32,10 +46,6 @@ class RegistryUtilityApp(QMainWindow):
         main_layout.setContentsMargins(WINDOW_MARGIN, WINDOW_MARGIN, WINDOW_MARGIN, WINDOW_MARGIN)
 
         self.tabs = QTabWidget()
-        self.tabs.setStyleSheet(
-            "QTabWidget::pane { border: 0; } "
-            "QTabBar::tab { font-size: 12pt; font-weight: bold; padding: 10px; }"
-        )
         main_layout.addWidget(self.tabs)
 
         self.compare_tab = CompareTab()
@@ -43,5 +53,11 @@ class RegistryUtilityApp(QMainWindow):
 
         self.backup_tab = BackupTab()
         self.tabs.addTab(self.backup_tab, "Generate Backup")
+
+        self.convert_tab = ConvertTab()
+        self.tabs.addTab(self.convert_tab, ".reg to .bat")
+
+        self.ps1_convert_tab = Ps1ConvertTab()
+        self.tabs.addTab(self.ps1_convert_tab, ".ps1 to .bat")
 
         self.statusBar().showMessage(APP_CREDITS)

@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtWidgets import QApplication, QMessageBox
 
 from regutility.core.registry import is_windows_system
-from regutility.ui.main_window import RegistryUtilityApp
+from regutility.ui.main_window import ScriptForgeApp
 from regutility.styles import MODERN_DARK_STYLESHEET
 
 
@@ -25,7 +25,7 @@ def main() -> None:
     app = QApplication(sys.argv)
     app.setStyleSheet(MODERN_DARK_STYLESHEET)
 
-    window = RegistryUtilityApp()
+    window = ScriptForgeApp()
     window.show()
 
     sys.exit(app.exec())
