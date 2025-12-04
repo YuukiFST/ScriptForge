@@ -44,7 +44,8 @@ Download `ScriptForge.exe` from [Releases](https://github.com/YuukiFST/RegUtilit
 
 ## Screenshots
 
-<img width="1200" height="847" alt="image" src="https://github.com/user-attachments/assets/aaf185a5-314e-46dd-a32c-8580d7a0e771" />
+<img width="1201" height="827" alt="image" src="https://github.com/user-attachments/assets/875ae943-54f3-4ed5-b3ba-132dd5fc8b86" />
+
 
 
 ## Result Icons
