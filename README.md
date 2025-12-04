@@ -42,17 +42,10 @@ python -m regutility
 ### Standalone Executable
 Download `ScriptForge.exe` from [Releases](https://github.com/YuukiFST/RegUtility/releases).
 
-## Usage
+## Screenshots
 
-```bash
-# Run from source
-cd src
-python -m regutility
+<img width="1200" height="847" alt="image" src="https://github.com/user-attachments/assets/aaf185a5-314e-46dd-a32c-8580d7a0e771" />
 
-# Or build executable
-pip install pyinstaller pillow
-pyinstaller --onefile --windowed --name "ScriptForge" --icon "src\regutility\assets\icon.ico" src\regutility\__main__.py
-```
 
 ## Result Icons
 
