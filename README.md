@@ -89,7 +89,7 @@ src/regutility/
 
 ## Author
 
-**Fausto Yuuki** - Discord: yuuki_0711
+**Yuuki** - Discord: yuuki_0711
 
 ## License
 
