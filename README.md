@@ -29,16 +29,6 @@ A Windows scripting toolkit with a modern dark interface for registry management
 | Run as Admin | Auto-elevate with UAC prompt |
 | Bypass execution policy | Run without restrictions |
 
-## Installation
-
-### From Source
-```bash
-git clone https://github.com/YuukiFST/RegUtility.git
-cd RegUtility
-pip install -r requirements.txt
-python -m regutility
-```
-
 ### Standalone Executable
 Download `ScriptForge.exe` from [Releases](https://github.com/YuukiFST/RegUtility/releases).
 
