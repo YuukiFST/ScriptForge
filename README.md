@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/license-MIT-orange.svg" alt="MIT License">
 </p>
 
-A Windows scripting toolkit with a modern dark interface for registry management and script conversion.
+A Windows scripting toolkit for registry management and script conversion.
 
 ## Features
 
