@@ -6,7 +6,6 @@ from regutility.styles import MODERN_DARK_STYLESHEET
 
 
 def main() -> None:
-    # Set AppUserModelID for proper taskbar icon handling
     try:
         from ctypes import windll
         myappid = 'yuukifst.scriptforge.regutility.1.0'
