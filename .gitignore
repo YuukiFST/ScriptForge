@@ -29,6 +29,9 @@ MANIFEST
 # PyInstaller
 *.manifest
 *.spec
+anvil.ico
+src/regutility/assets/icon.ico
+src/regutility/assets/icon.png
 
 # Installer logs
 pip-log.txt

@@ -1,5 +1,4 @@
 from typing import Tuple
-
 from regutility.models import ComparisonStatus, SystemStatus
 from regutility.utils.constants import (
     STATUS_MATCH,
@@ -10,22 +9,22 @@ from regutility.utils.constants import (
 
 
 def create_comparison_displays(
-    file_value: str, 
-    system_value: str, 
-    status: ComparisonStatus
+    file_value: str,
+    system_value: str,
+    status: ComparisonStatus,
 ) -> Tuple[str, str]:
     display_map = {
         ComparisonStatus.MATCH: (
-            f"{STATUS_MATCH} {file_value}", 
-            f"{STATUS_MATCH} {system_value}"
+            f'{STATUS_MATCH} {file_value}',
+            f'{STATUS_MATCH} {system_value}',
         ),
         ComparisonStatus.DIFFERENT: (
-            f"{STATUS_DIFFERENT_FILE} {file_value}", 
-            f"{STATUS_DIFFERENT_SYSTEM} {system_value}"
+            f'{STATUS_DIFFERENT_FILE} {file_value}',
+            f'{STATUS_DIFFERENT_SYSTEM} {system_value}',
         ),
         ComparisonStatus.MISSING: (
-            file_value, 
-            f"{STATUS_NOT_FOUND} KEY/VALUE NOT FOUND"
+            file_value,
+            f'{STATUS_NOT_FOUND} KEY/VALUE NOT FOUND',
         ),
         ComparisonStatus.ERROR: (file_value, system_value),
         ComparisonStatus.NOT_WINDOWS: (file_value, system_value),
@@ -34,9 +33,9 @@ def create_comparison_displays(
 
 
 def determine_comparison_status(
-    file_value: str, 
-    system_value: str, 
-    system_status: str
+    file_value: str,
+    system_value: str,
+    system_status: str,
 ) -> ComparisonStatus:
     if system_status == SystemStatus.NOT_FOUND.value:
         return ComparisonStatus.MISSING
@@ -51,14 +50,10 @@ def determine_comparison_status(
 
 
 def compare_values(
-    file_value: str, 
-    system_value: str, 
-    system_status: str
+    file_value: str,
+    system_value: str,
+    system_status: str,
 ) -> Tuple[str, str, str]:
-    comparison_status = determine_comparison_status(
-        file_value, system_value, system_status
-    )
-    file_display, system_display = create_comparison_displays(
-        file_value, system_value, comparison_status
-    )
-    return comparison_status.value, file_display, system_display
+    comparison_status = determine_comparison_status(file_value, system_value, system_status)
+    file_display, system_display = create_comparison_displays(file_value, system_value, comparison_status)
+    return (comparison_status.value, file_display, system_display)

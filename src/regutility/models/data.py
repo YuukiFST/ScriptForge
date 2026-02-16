@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class ComparisonResult:
     path: str
@@ -11,7 +10,6 @@ class ComparisonResult:
     system_display: str
     match_status: str
     system_status: str
-
 
 @dataclass
 class RegistryKey:

@@ -17,55 +17,45 @@ def encode_ps1_to_base64(ps1_content: str) -> str:
 
 
 def build_powershell_command(options: Ps1ConversionOptions) -> List[str]:
-    cmd_parts = ["powershell", "-NoProfile"]
-    
+    cmd_parts = ['powershell', '-NoProfile']
     if options.bypass_execution_policy:
-        cmd_parts.append("-ExecutionPolicy Bypass")
-    
+        cmd_parts.append('-ExecutionPolicy Bypass')
     if options.hide_window:
-        cmd_parts.append("-WindowStyle Hidden")
-    
+        cmd_parts.append('-WindowStyle Hidden')
     return cmd_parts
 
 
 def generate_bat_from_ps1_inline(ps1_content: str, options: Ps1ConversionOptions) -> str:
     ps1_escaped = ps1_content.replace('"', '\\"').replace('%', '%%')
     ps1_escaped = ps1_escaped.replace('\r\n', '; ').replace('\n', '; ')
-    
     cmd_parts = build_powershell_command(options)
     cmd_parts.append(f'-Command "{ps1_escaped}"')
-    
-    return "@echo off\r\n" + " ".join(cmd_parts)
+    return '@echo off\r\n' + ' '.join(cmd_parts)
 
 
 def generate_bat_from_ps1_base64(ps1_content: str, options: Ps1ConversionOptions) -> str:
     encoded = encode_ps1_to_base64(ps1_content)
-    
     cmd_parts = build_powershell_command(options)
-    cmd_parts.append(f"-EncodedCommand {encoded}")
-    
-    return "@echo off\r\n" + " ".join(cmd_parts)
+    cmd_parts.append(f'-EncodedCommand {encoded}')
+    return '@echo off\r\n' + ' '.join(cmd_parts)
 
 
 def generate_bat_from_ps1_admin(ps1_content: str, options: Ps1ConversionOptions) -> str:
     encoded = encode_ps1_to_base64(ps1_content)
-    
     admin_check = [
-        "@echo off",
-        "",
-        "net session >nul 2>&1",
-        "if %errorLevel% neq 0 (",
-        "    echo Requesting administrator privileges...",
+        '@echo off',
+        '',
+        'net session >nul 2>&1',
+        'if %errorLevel% neq 0 (',
+        '    echo Requesting administrator privileges...',
         "    powershell -Command \"Start-Process -FilePath '%~f0' -Verb RunAs\"",
-        "    exit /b",
-        ")",
-        "",
+        '    exit /b',
+        ')',
+        '',
     ]
-    
     cmd_parts = build_powershell_command(options)
-    cmd_parts.append(f"-EncodedCommand {encoded}")
-    
-    return "\r\n".join(admin_check) + " ".join(cmd_parts)
+    cmd_parts.append(f'-EncodedCommand {encoded}')
+    return '\r\n'.join(admin_check) + ' '.join(cmd_parts)
 
 
 def convert_ps1_to_bat(ps1_content: str, options: Ps1ConversionOptions) -> str:

@@ -2,16 +2,17 @@ MODERN_DARK_STYLESHEET = """
 * {
     margin: 0;
     padding: 0;
+    font-family: "Iosevka", "Segoe UI", "Arial", sans-serif;
 }
 
 QMainWindow {
-    background-color: #0D0D0D;
+    background-color: #000000;
 }
 
 QWidget {
-    background-color: #0D0D0D;
+    background-color: #000000;
     color: #E0E0E0;
-    font-family: "Segoe UI", "Arial", sans-serif;
+    font-family: "Iosevka", "Segoe UI", "Arial", sans-serif;
     font-size: 10pt;
 }
 
@@ -21,7 +22,7 @@ QPushButton {
     border: 1px solid #333333;
     border-radius: 4px;
     padding: 8px 20px;
-    font-family: "Segoe UI", "Arial", sans-serif;
+    font-family: "Iosevka", "Segoe UI", "Arial", sans-serif;
     font-size: 10pt;
     font-weight: 500;
 }
@@ -47,7 +48,7 @@ QTextEdit {
     border-radius: 4px;
     padding: 10px;
     color: #C0C0C0;
-    font-family: "Consolas", "Monaco", monospace;
+    font-family: "Iosevka", "Consolas", "Monaco", monospace;
     font-size: 9pt;
     selection-background-color: #404040;
 }
@@ -70,7 +71,7 @@ QTextEdit[objectName="log_output"] {
 QLabel {
     background-color: transparent;
     color: #B0B0B0;
-    font-family: "Segoe UI", "Arial", sans-serif;
+    font-family: "Iosevka", "Segoe UI", "Arial", sans-serif;
     font-size: 10pt;
     border: none;
     padding: 0;
@@ -116,7 +117,7 @@ QStatusBar {
 QTabWidget::pane {
     border: 1px solid #1A1A1A;
     border-radius: 0;
-    background-color: #0D0D0D;
+    background-color: #000000;
     top: -1px;
 }
 
@@ -132,9 +133,9 @@ QTabBar::tab {
 }
 
 QTabBar::tab:selected {
-    background-color: #0D0D0D;
+    background-color: #000000;
     color: #E0E0E0;
-    border-bottom: 2px solid #0D0D0D;
+    border-bottom: 2px solid #000000;
 }
 
 QTabBar::tab:hover:!selected {
@@ -158,7 +159,7 @@ QGroupBox::title {
     subcontrol-position: top left;
     padding: 0 8px;
     color: #808080;
-    background-color: #0D0D0D;
+    background-color: #000000;
 }
 
 QCheckBox {

@@ -1,7 +1,6 @@
 import os
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
-
 from regutility.core.parser import parse_reg_file
 
 
@@ -10,131 +9,118 @@ class ConversionOptions:
     include_echo_off: bool = True
     include_status_messages: bool = True
     include_pause: bool = True
-    source_filename: str = ""
+    source_filename: str = ''
 
 
 def parse_reg_value_type(value: str) -> Tuple[str, Optional[str]]:
-    if value == "-":
-        return "DELETE", None
-    
+    if value == '-':
+        return ('DELETE', None)
     if value.startswith('"') and value.endswith('"'):
-        return "REG_SZ", value[1:-1]
-    
-    if value.startswith("dword:"):
+        return ('REG_SZ', value[1:-1])
+    if value.startswith('dword:'):
         hex_value = value[6:]
-        return "REG_DWORD", str(int(hex_value, 16))
-    
-    if value.startswith("qword:"):
+        return ('REG_DWORD', str(int(hex_value, 16)))
+    if value.startswith('qword:'):
         hex_value = value[6:]
-        return "REG_QWORD", str(int(hex_value, 16))
-    
-    if value.startswith("hex:"):
-        hex_data = value[4:].replace(",", "")
-        return "REG_BINARY", hex_data
-    
-    if value.startswith("hex(2):"):
-        hex_data = value[7:].replace(",", "").replace("00", "")
+        return ('REG_QWORD', str(int(hex_value, 16)))
+    if value.startswith('hex:'):
+        hex_data = value[4:].replace(',', '')
+        return ('REG_BINARY', hex_data)
+    if value.startswith('hex(2):'):
+        hex_data = value[7:].replace(',', '').replace('00', '')
         try:
             bytes_data = bytes.fromhex(hex_data)
             decoded = bytes_data.decode('utf-16-le', errors='ignore').rstrip('\x00')
-            return "REG_EXPAND_SZ", decoded
+            return ('REG_EXPAND_SZ', decoded)
         except (ValueError, UnicodeDecodeError):
-            return "REG_EXPAND_SZ", ""
-    
-    if value.startswith("hex(7):"):
-        return "REG_MULTI_SZ", value[7:]
-    
-    if value.startswith("hex(b):"):
-        hex_data = value[7:].replace(",", "")
-        return "REG_QWORD", str(int(hex_data, 16)) if hex_data else "0"
-    
-    return "REG_SZ", value
+            return ('REG_EXPAND_SZ', '')
+    if value.startswith('hex(7):'):
+        return ('REG_MULTI_SZ', value[7:])
+    if value.startswith('hex(b):'):
+        hex_data = value[7:].replace(',', '')
+        return ('REG_QWORD', str(int(hex_data, 16)) if hex_data else '0')
+    return ('REG_SZ', value)
 
 
 def escape_batch_string(value: Optional[str]) -> str:
     if value is None:
-        return ""
+        return ''
     replacements = [
-        ("%", "%%"),
-        ("^", "^^"),
-        ("&", "^&"),
-        ("<", "^<"),
-        (">", "^>"),
-        ("|", "^|"),
+        ('%', '%%'),
+        ('^', '^^'),
+        ('&', '^&'),
+        ('<', '^<'),
+        ('>', '^>'),
+        ('|', '^|'),
     ]
     for old, new in replacements:
         value = value.replace(old, new)
     return value
 
 
-def generate_reg_add_command(key_path: str, value_name: str, reg_type: str, data: Optional[str]) -> str:
+def generate_reg_add_command(
+    key_path: str,
+    value_name: str,
+    reg_type: str,
+    data: Optional[str],
+) -> str:
     escaped_data = escape_batch_string(data)
-    value_part = "/ve" if value_name == "@" else f'/v "{value_name}"'
-    
+    value_part = '/ve' if value_name == '@' else f'/v "{value_name}"'
     type_formats = {
-        "REG_SZ": f'REG ADD "{key_path}" {value_part} /t REG_SZ /d "{escaped_data}" /f',
-        "REG_DWORD": f'REG ADD "{key_path}" {value_part} /t REG_DWORD /d {data} /f',
-        "REG_QWORD": f'REG ADD "{key_path}" {value_part} /t REG_QWORD /d {data} /f',
-        "REG_BINARY": f'REG ADD "{key_path}" {value_part} /t REG_BINARY /d {data} /f',
-        "REG_EXPAND_SZ": f'REG ADD "{key_path}" {value_part} /t REG_EXPAND_SZ /d "{escaped_data}" /f',
-        "REG_MULTI_SZ": f'REG ADD "{key_path}" {value_part} /t REG_MULTI_SZ /d "{escaped_data}" /f',
+        'REG_SZ': f'REG ADD "{key_path}" {value_part} /t REG_SZ /d "{escaped_data}" /f',
+        'REG_DWORD': f'REG ADD "{key_path}" {value_part} /t REG_DWORD /d {data} /f',
+        'REG_QWORD': f'REG ADD "{key_path}" {value_part} /t REG_QWORD /d {data} /f',
+        'REG_BINARY': f'REG ADD "{key_path}" {value_part} /t REG_BINARY /d {data} /f',
+        'REG_EXPAND_SZ': f'REG ADD "{key_path}" {value_part} /t REG_EXPAND_SZ /d "{escaped_data}" /f',
+        'REG_MULTI_SZ': f'REG ADD "{key_path}" {value_part} /t REG_MULTI_SZ /d "{escaped_data}" /f',
     }
-    
     return type_formats.get(reg_type, f'REG ADD "{key_path}" {value_part} /t {reg_type} /d "{escaped_data}" /f')
 
 
 def generate_reg_delete_command(key_path: str, value_name: Optional[str] = None) -> str:
-    if value_name and value_name != "@":
+    if value_name and value_name != '@':
         return f'REG DELETE "{key_path}" /v "{value_name}" /f'
-    elif value_name == "@":
+    elif value_name == '@':
         return f'REG DELETE "{key_path}" /ve /f'
     return f'REG DELETE "{key_path}" /f'
 
 
-def convert_reg_to_bat(parsed_settings: Dict[str, Dict[str, str]], options: ConversionOptions) -> str:
+def convert_reg_to_bat(
+    parsed_settings: Dict[str, Dict[str, str]],
+    options: ConversionOptions,
+) -> str:
     lines: List[str] = []
-    
     if options.include_echo_off:
-        lines.append("@echo off")
-        lines.append("")
-    
-    lines.append("REM Generated by ScriptForge")
+        lines.append('@echo off')
+        lines.append('')
+    lines.append('REM Generated by ScriptForge')
     if options.source_filename:
-        lines.append(f"REM Source: {options.source_filename}")
-    lines.append("")
-    
+        lines.append(f'REM Source: {options.source_filename}')
+    lines.append('')
     for path, keys in parsed_settings.items():
-        is_delete_key = path.startswith("-")
+        is_delete_key = path.startswith('-')
         actual_path = path[1:] if is_delete_key else path
-        
         if is_delete_key:
             if options.include_status_messages:
                 lines.append(f'echo Deleting key: {actual_path}')
             lines.append(generate_reg_delete_command(actual_path))
-            lines.append("")
+            lines.append('')
             continue
-        
         if options.include_status_messages:
             lines.append(f'echo Processing: {actual_path}')
-        
         for value_name, value in keys.items():
             reg_type, data = parse_reg_value_type(value)
-            
-            if reg_type == "DELETE":
+            if reg_type == 'DELETE':
                 lines.append(generate_reg_delete_command(actual_path, value_name))
             else:
                 lines.append(generate_reg_add_command(actual_path, value_name, reg_type, data))
-        
-        lines.append("")
-    
+        lines.append('')
     if options.include_status_messages:
-        lines.append("echo.")
-        lines.append("echo Registry changes applied successfully.")
-    
+        lines.append('echo.')
+        lines.append('echo Registry changes applied successfully.')
     if options.include_pause:
-        lines.append("pause")
-    
-    return "\r\n".join(lines)
+        lines.append('pause')
+    return '\r\n'.join(lines)
 
 
 def convert_reg_file_to_bat(file_path: str, options: ConversionOptions) -> str:
