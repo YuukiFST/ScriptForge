@@ -27,12 +27,8 @@ def get_icon_path() -> str:
     and PyInstaller frozen states.
     """
     if getattr(sys, 'frozen', False):
-        # Running in a PyInstaller bundle
-        # PyInstaller extracts to sys._MEIPASS
-        # Resources are at sys._MEIPASS/regutility/assets due to build_exe.py structure
         base_path = os.path.join(sys._MEIPASS, 'regutility')
     else:
-        # Running in a normal Python environment
         base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
     return os.path.join(base_path, 'assets', 'anvil.ico')
